@@ -259,7 +259,7 @@ paths:
         404:
           description: "Order not found"
 
-    /cart/add:
+  /cart/add:
     post:
       tags:
         - Cart
