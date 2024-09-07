@@ -6,12 +6,6 @@ from caching import cache
 from flask_swagger_ui import get_swaggerui_blueprint
 
 from models.customer import Customer
-from models.product import Product
-from models.order import Order
-from models.orderproduct import order_product
-from models.cartproduct import cart_product
-from models.role import Role
-from models.cart import Carts, Item
 
 from routes.customerBP import customer_blueprint
 from routes.productBP import product_blueprint
@@ -19,16 +13,14 @@ from routes.orderBP import order_blueprint
 from routes.cartBP import cart_blueprint
 
 #SWAGGER
+
+# HEY, ME, REMEMBER TO EDIT THE DOCUMENTATION WHEN EVERYTHING'S GOOD. Probably just in week 7 or 8?
+
+
 SWAGGER_URL = '/api/docs' # URL endpoint for swagger doc.
 API_URL = '/static/swagger.yaml'
 
 swagger_blueprint = get_swaggerui_blueprint(SWAGGER_URL, API_URL, config={"app_name":"Ecommerce API"})
-
-# Before using customer creation functions you must currently use
-# INSERT INTO roles (role_name)
-# VALUES
-# ('Admin'),
-# ('User');
 
 
 def create_app(config_name):
@@ -47,8 +39,6 @@ def create_app(config_name):
 def blueprint_config(app):
     app.register_blueprint(customer_blueprint, url_prefix='/customers')
     app.register_blueprint(product_blueprint, url_prefix='/products')
-    app.register_blueprint(order_blueprint, url_prefix='/orders')
-    app.register_blueprint(cart_blueprint, url_prefix='/carts')
     app.register_blueprint(swagger_blueprint, url_prefix = SWAGGER_URL)
 
 def rate_limit_config(app):
@@ -70,3 +60,9 @@ if __name__ == '__main__':
         db.create_all()
 
     app.run()
+
+
+# things to add rn:
+# Confirm password. Can probably use remaining cart confirmation stuff to do this with edits.
+# how to get it so that token translates to frontend?
+# Install additional requirements such as DJango and implement. aka install to the VENV 

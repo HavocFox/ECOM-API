@@ -5,8 +5,8 @@ from sqlalchemy import select
 from utils.util import encode_token
 from models.schemas.customerSchema import customer_update_schema
 
-def login(username, password):
-    query = select(Customer).where(Customer.username == username)
+def login(email, password):
+    query = select(Customer).where(Customer.email == email)
     customer = db.session.execute(query).scalar_one_or_none()
 
     if customer and customer.password == password:
@@ -19,24 +19,23 @@ def login(username, password):
         return response
     return None
 
+
+
+
 def save(customer_data):
     new_customer = Customer(
-        name=customer_data['name'],
         email=customer_data['email'],
         phone=customer_data['phone'],
-        username=customer_data['username'],
         password=customer_data['password'],
-        role_id=customer_data.get('role_id', 2)
     )
     db.session.add(new_customer)
     db.session.commit()
 
-    # Please note... a new cart will becreated alongside a customer, only if this customer is created using this endpoint (not just in MYSQL).
-    new_cart = Carts(id=new_customer.id, total_price = 0)
-    db.session.add(new_cart)
-    db.session.commit()
-
     return new_customer
+
+
+
+
 
 def find_all(page, per_page):
     customers = db.paginate(select(Customer), page=page, per_page=per_page)
@@ -47,13 +46,13 @@ def search_customer_by_id(id):
     customer = db.session.execute(query).scalar_one_or_none()
     return customer
 
+
+# Might not use this. Not a desperately needed feature
 def update_customer(id, customer_data):
     query = select(Customer).where(Customer.id == id)
     updated_customer = db.session.execute(query).scalar_one_or_none()
     if updated_customer:
-        updated_customer.name = customer_data['name']
         updated_customer.email = customer_data['email']
-        updated_customer.phone = customer_data['phone']
         db.session.commit()
         return updated_customer
     return None
